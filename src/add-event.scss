@@ -1,0 +1,92 @@
+.add-event-container {
+    width: 30%;
+    padding: 20px;
+    background-color: #fcc83831;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    animation: slideDown 0.8s ease forwards;
+    position: relative;
+}
+
+.link {
+    animation: fadeIn 0.5s ease-in-out;
+    margin: 30px auto 0;
+    width: fit-content;
+    display: block;
+    color: #8f9134;
+}
+
+a:hover {
+    color: #c0c246;
+}
+
+@keyframes slideDown {
+    0% {
+        left: -400px;
+        opacity: 0;
+    }
+    100% {
+        left: 35%;
+        opacity: 1;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+    font-size: 24px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+input[type="text"],
+input[type="datetime-local"] {
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    width: 100%;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="datetime-local"]:focus {
+    border-color: #4caf50;
+    outline: none;
+}
+
+.btn-submit {
+    background-color: #4caf50;
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 100%;
+}
+
+.btn-submit:hover {
+    background-color: #45a049;
+}
