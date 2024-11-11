@@ -4,13 +4,17 @@ import { MyEvent } from "./model";
 function replacer(key: string, value: any) {
     console.log("here", this);
     if (this[key] instanceof Date) {
-        return moment(this[key]).format("YYYY-MM-DDTHH:mm");
+        return this[key].toISOString();
     }
     return value;
 }
 
 export function getEvents(): MyEvent[] {
-    return JSON.parse(localStorage.getItem("events") ?? "[]");
+    return JSON.parse(localStorage.getItem("events") ?? "[]").map((event: MyEvent) => ({
+        ...event,
+        start: new Date(event.start),
+        end: new Date(event.end),
+    }));
 }
 
 export function getEvent(id: string): MyEvent {
@@ -24,7 +28,11 @@ export function setEvent(newEvent: MyEvent) {
     if (!Array.isArray(events)) {
         events = [];
     }
-    events.push(newEvent);
+    events.push({
+        ...newEvent,
+        start: new Date(newEvent.start).toISOString(),
+        end: new Date(newEvent.end).toISOString(),
+    });
     localStorage.setItem("events", JSON.stringify(events, replacer));
 }
 
@@ -39,9 +47,7 @@ export function deleteEvent(id: string | undefined): void {
 }
 
 export function updateEvent(updatedEvent: MyEvent) {
-    let events: MyEvent[] = JSON.parse(localStorage.getItem("events") || "[]");
-
-    events = events.map((event) =>
+    let events: MyEvent[] = getEvents().map((event) =>
         event.id === updatedEvent.id ? updatedEvent : event
     );
     localStorage.setItem("events", JSON.stringify(events, replacer));

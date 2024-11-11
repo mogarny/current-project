@@ -1,13 +1,17 @@
 import { NavigateOptions, useNavigate, useParams } from "react-router-dom";
-import { getEvent, deleteEvent } from "./service";
+import { getEvent } from "./service";
 import { MyEvent } from "./model";
 import moment from "moment";
 import './event.scss'
 import { toSvg } from 'jdenticon';
+import {useDispatch, useSelector} from "react-redux";
+import {removeEvent} from "./store/eventSlice.ts";
 
 
 export const Event = () => {
-    const params = useParams();    
+    const params = useParams();
+    const dispatch = useDispatch();
+    const state = useSelector((state: RootState) => state.events.events);
     const event: MyEvent = getEvent(params.id!);
     let svg = toSvg(event.title, 122);
     const markup = { __html: svg };
@@ -21,7 +25,8 @@ export const Event = () => {
     }
 
     const deleteEventM = (id: string) => {
-        deleteEvent(id);
+
+        dispatch(removeEvent(id));
         navigate('/');
     }
 

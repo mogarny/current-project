@@ -5,8 +5,11 @@ import { EventForm, MyEvent } from "./model";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { v4 as uuidv4 } from "uuid";
 import { FormEvent, useEffect, useState } from "react";
-import { getEvent, getEvents, setEvent, updateEvent } from "./service";
+import { getEvent, setEvent, updateEvent } from "./service";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
+import {useDispatch, useSelector} from "react-redux";
+import {AppDispatch, RootState} from "./store/strore.ts";
+import {saveEvents} from "./store/eventSlice.ts";
 
 let schema = Yup.object()
     .shape({
@@ -25,6 +28,8 @@ let schema = Yup.object()
     .default("");
 
 export const AddEvent = () => {
+    const dispatch = useDispatch<AppDispatch>();
+    const events = useSelector((state: RootState) => state.events.events);
     const [isEditMode, setIsEditMode] = useState(false);
     const navigate = useNavigate();
     const params = useParams();
@@ -86,9 +91,9 @@ export const AddEvent = () => {
             };
 
             if (isEditMode && values.id) {
-                updateEvent(newEvent);
+                dispatch(updateEvent(newEvent));
             } else {
-                setEvent(newEvent);
+                dispatch(saveEvents(newEvent));
             }
         }
         navigate("/");

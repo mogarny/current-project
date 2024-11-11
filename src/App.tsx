@@ -1,17 +1,22 @@
 import { Calendar, momentLocalizer, ToolbarProps } from "react-big-calendar";
 import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
-import { getEvents, updateEvent } from "./service";
+import {updateEvent } from "./service";
 import { Link, useNavigate } from "react-router-dom";
 import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
 import "react-big-calendar/lib/addons/dragAndDrop/styles.css";
 import { MyEvent } from "./model";
+import {useDispatch, useSelector} from "react-redux";
+import {AppDispatch, RootState} from "./store/strore.ts";
+import {eventsWithDates} from "./store/eventSlice.ts";
 
 const localizer = momentLocalizer(moment);
 const DragAndDropCalendar = withDragAndDrop(Calendar);
 
 export const MyCalendar = () => {
     const navigate = useNavigate();
+    const dispatch = useDispatch<AppDispatch>();
+    const events = useSelector((state: RootState) => state.events.events);
 
     const handleClick = (arg: any) => {
         console.log("Event clicked: ", arg);
@@ -35,7 +40,7 @@ export const MyCalendar = () => {
         <div>
             <DragAndDropCalendar
                 localizer={localizer}
-                events={getEvents()}
+                events={events}
                 startAccessor={(event: Object) =>
                     new Date((event as MyEvent).start!)
                 }
