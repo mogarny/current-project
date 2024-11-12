@@ -6,14 +6,19 @@ interface EventsState {
     events: MyEvent[];
 }
 
-export const saveEvents = event => async dispatch => {
-    persistEventsToLocalStorage(event);
-     dispatch(setEventFn(event));
+export const saveEvents = (event: MyEvent) => async (dispatch: (arg0: { payload: MyEvent; type: "events/setEventFn"; }) => void) => {
+    const serializedEvent = {
+        ...event,
+        start: new Date(event.start!).toISOString(),
+        end: new Date(event.end!).toISOString(),
+    }
+    persistEventsToLocalStorage(serializedEvent);
+     dispatch(setEventFn(serializedEvent));
 }
 
-export const removeEvent = event => async dispatch => {
-    deleteEvent(event);
-    dispatch(deleteEventFn(event));
+export const removeEvent = (id: string) => async (dispatch: (arg0: { payload: string; type: "events/deleteEventFn"; }) => void) => {
+    deleteEvent(id);
+    dispatch(deleteEventFn(id));
 }
 
 const initialState: EventsState = {
@@ -27,8 +32,8 @@ const eventsSlice = createSlice({
         setEventFn: (state, action: PayloadAction<MyEvent>) => {
             state.events = [...state.events, {
                 ...action.payload,
-                start: new Date(action.payload.start),
-                end: new Date(action.payload.end),
+                start: new Date(action.payload.start!).toISOString(),
+                end: new Date(action.payload.end!).toISOString(),
             }];
         },
         updateEvent: (state, action: PayloadAction<MyEvent>) => {
@@ -40,6 +45,7 @@ const eventsSlice = createSlice({
             }
         },
         deleteEventFn: (state, action: PayloadAction<string>) => {
+            console.log('delete')
             state.events = state.events.filter(
                 (event) => event.id !== action.payload
             );

@@ -1,9 +1,11 @@
-import moment from "moment";
 import { MyEvent } from "./model";
 
 function replacer(key: string, value: any) {
+    // @ts-ignore
     console.log("here", this);
+    // @ts-ignore
     if (this[key] instanceof Date) {
+        // @ts-ignore
         return this[key].toISOString();
     }
     return value;
@@ -12,8 +14,8 @@ function replacer(key: string, value: any) {
 export function getEvents(): MyEvent[] {
     return JSON.parse(localStorage.getItem("events") ?? "[]").map((event: MyEvent) => ({
         ...event,
-        start: new Date(event.start),
-        end: new Date(event.end),
+        start: new Date(event.start!),
+        end: new Date(event.end!),
     }));
 }
 
@@ -30,8 +32,8 @@ export function setEvent(newEvent: MyEvent) {
     }
     events.push({
         ...newEvent,
-        start: new Date(newEvent.start).toISOString(),
-        end: new Date(newEvent.end).toISOString(),
+        start: new Date(newEvent.start!).toISOString(),
+        end: new Date(newEvent.end!).toISOString(),
     });
     localStorage.setItem("events", JSON.stringify(events, replacer));
 }

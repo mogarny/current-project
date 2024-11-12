@@ -1,4 +1,4 @@
-import { NavigateOptions, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { getEvent } from "./service";
 import { MyEvent } from "./model";
 import moment from "moment";
@@ -11,7 +11,6 @@ import {removeEvent} from "./store/eventSlice.ts";
 export const Event = () => {
     const params = useParams();
     const dispatch = useDispatch();
-    const state = useSelector((state: RootState) => state.events.events);
     const event: MyEvent = getEvent(params.id!);
     let svg = toSvg(event.title, 122);
     const markup = { __html: svg };
@@ -45,9 +44,9 @@ export const Event = () => {
                 <div className="event-details">
             <h2 className="event-title">{event.title!}</h2>
             <p className="event-timing">
-                <strong>Start:</strong> {dataToDisplay(event.start!)}
+                <strong>Start:</strong> {dataToDisplay(new Date(event.start))}
                 <br/>
-                <strong>End:</strong>{dataToDisplay(event.end!)}
+                <strong>End:</strong>{dataToDisplay(new Date(event.end))}
             </p>
             <p className="event-people">
                 {event.people && 'Attendees:' + event.people}
