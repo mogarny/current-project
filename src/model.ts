@@ -12,3 +12,14 @@ export interface EventForm {
     title: string;
     people?: string | null;
 }
+
+export interface SerializedEvent {
+    start: string;
+    end: string;
+    people?: string | null;
+    id: string | undefined;
+    image?: string;
+    allDay?: boolean | undefined;
+    title?: React. ReactNode | undefined;
+    resource?: any;
+}

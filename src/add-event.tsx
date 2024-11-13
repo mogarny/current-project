@@ -9,7 +9,8 @@ import { getEvent, setEvent, updateEvent } from "./service";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch, RootState} from "./store/strore.ts";
-import {saveEvents} from "./store/eventSlice.ts";
+import {saveEvents, updateEventMid} from "./store/eventSlice.ts";
+import moment from "moment";
 
 let schema = Yup.object()
     .shape({
@@ -33,7 +34,10 @@ export const AddEvent = () => {
     const [isEditMode, setIsEditMode] = useState(false);
     const navigate = useNavigate();
     const params = useParams();
-    const event: MyEvent = getEvent(params.id!) || undefined;
+    let event: MyEvent | undefined = events.find(event => event.id === params.id);
+    if (event) {
+    event = {...event, start: moment(event.start).format('YYYY-MM-DDTHH:mm:ss'), end: moment(event.end).format('YYYY-MM-DDTHH:mm:ss')};
+    }
     const {
         handleSubmit,
         register,
@@ -91,7 +95,7 @@ export const AddEvent = () => {
             };
 
             if (isEditMode && values.id) {
-                dispatch(updateEvent(newEvent));
+                dispatch(updateEventMid(newEvent));
             } else {
                 dispatch(saveEvents(newEvent));
             }

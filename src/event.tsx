@@ -6,12 +6,15 @@ import './event.scss'
 import { toSvg } from 'jdenticon';
 import {useDispatch, useSelector} from "react-redux";
 import {removeEvent} from "./store/eventSlice.ts";
+import {RootState} from "./store/strore.ts";
 
 
 export const Event = () => {
     const params = useParams();
     const dispatch = useDispatch();
-    const event: MyEvent = getEvent(params.id!);
+    const events = useSelector((state: RootState) => state.events.events);
+    const event = events.find(event => event.id === params.id);
+    // const event: MyEvent = getEvent(params.id!);
     let svg = toSvg(event.title, 122);
     const markup = { __html: svg };
     const navigate = useNavigate();
@@ -44,9 +47,9 @@ export const Event = () => {
                 <div className="event-details">
             <h2 className="event-title">{event.title!}</h2>
             <p className="event-timing">
-                <strong>Start:</strong> {dataToDisplay(new Date(event.start))}
+                <strong>Start:</strong> {dataToDisplay(new Date(event.start!))}
                 <br/>
-                <strong>End:</strong>{dataToDisplay(new Date(event.end))}
+                <strong>End:</strong>{dataToDisplay(new Date(event.end!))}
             </p>
             <p className="event-people">
                 {event.people && 'Attendees:' + event.people}

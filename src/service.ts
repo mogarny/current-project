@@ -1,4 +1,4 @@
-import { MyEvent } from "./model";
+import {MyEvent, SerializedEvent} from "./model";
 
 function replacer(key: string, value: any) {
     // @ts-ignore
@@ -25,7 +25,7 @@ export function getEvent(id: string): MyEvent {
     );
 }
 
-export function setEvent(newEvent: MyEvent) {
+export function setEvent(newEvent: SerializedEvent) {
     let events = JSON.parse(localStorage.getItem("events") || "[]");
     if (!Array.isArray(events)) {
         events = [];

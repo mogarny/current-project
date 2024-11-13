@@ -8,7 +8,7 @@ import "react-big-calendar/lib/addons/dragAndDrop/styles.css";
 import { MyEvent } from "./model";
 import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch, RootState} from "./store/strore.ts";
-import {eventsWithDates} from "./store/eventSlice.ts";
+import {eventsWithDates, updateEventMid} from "./store/eventSlice.ts";
 
 const localizer = momentLocalizer(moment);
 const DragAndDropCalendar = withDragAndDrop(Calendar);
@@ -29,11 +29,10 @@ export const MyCalendar = () => {
     };
 
     const onEventDrop = ({ event, start, end }: any) => {
-        event.start = start;
-        event.end = end;
-        console.log(event);
-
-        updateEvent(event);
+        dispatch(updateEventMid({...event,
+            start,
+            end,
+        }));
     };
 
     return (
